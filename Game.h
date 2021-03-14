@@ -32,7 +32,7 @@ struct Game
         string genre;
         string date;
         string manufacturer;
-        long id;
+        int id;
         Game(string _name, string _genre, string _date, string _manufacturer)
         {
             name = _name;

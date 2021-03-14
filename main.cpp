@@ -9,12 +9,32 @@ int main() {
     string date = "12.05.2015";
     string manufacturer = "4A Games";
 
-    Game *metro = new Game(name, genre, date, manufacturer);
+    Game metro(name, genre, date, manufacturer);
 
-     cout << metro->id;
+    HashTable table(5);
+    table.Add(metro);
+
+    name = "GTA";
+    genre = "Casual";
+    date = "12.12.2014";
+    manufacturer = "Rockstar Games";
+    Game gta(name, genre, date, manufacturer);
+    table.Add(gta);
+    table.Add(gta);
+    table.Add(gta);
+    table.Add(gta);
+    table.Add(gta);
 
 
+    cout << table;
 
+    table.Delete(metro);
+
+    cout << table;
+
+    table.Delete(gta);
+
+    cout << table;
 
     return 0;
 }
