@@ -54,18 +54,25 @@ class HashTable
         {
             if ((hashSize - tableFullness) < 3)
             {
-                Game* tempGames = new Game[hashSize + 20];
-                bool* tempAdr = new bool[hashSize + 20];
-                for (int i = 0; i < hashSize; ++i)
+                Game* tempGames = games;
+                bool* tempAdr = arrAddress;
+                hashSize+=20;
+                arrAddress = new bool[hashSize];
+                games = new Game[hashSize];
+                for (int i = 0; i < hashSize - 20; ++i)
                 {
-                    tempGames[i] = games[i];
-                    tempAdr[i] = arrAddress[i];
+                    if (!tempAdr[i])
+                    {
+                        Add(tempGames[i]);
+                    }
                 }
+                /*
                 arrAddress = new bool[hashSize + 20];
                 arrAddress = tempAdr;
                 games = new Game[hashSize + 20];
                 games = tempGames;
                 hashSize += 20;
+                 */
             }
            int index = key_hash_func(game.id, hashSize);
            if(checkCollision(arrAddress, index, hashSize))
@@ -89,6 +96,13 @@ class HashTable
         {
 
             int index = key_hash_func(game.id, hashSize);
+            if (arrAddress[index])
+            {
+                while (arrAddress[index])
+                {
+                    index = value_hash_func(index, hashSize);
+                }
+            }
                 if (games[index].id == game.id)
                 {
                     if (games[index].manufacturer == game.manufacturer && games[index].date == game.date && games[index].genre == game.genre && games[index].name == game.name)
@@ -120,6 +134,10 @@ class HashTable
         void Delete(Game game)
         {
             int index = Search(game);
+            if (index == -1)
+            {
+                return;
+            }
             arrAddress[index] = true;
             games[index].name = "";
             games[index].genre = "";
