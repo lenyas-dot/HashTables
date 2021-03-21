@@ -10,11 +10,20 @@ class HashTable
         Game* games;
         bool* arrAddress;
         int tableFullness;
+        int fillTable;
+        bool inProcess = false;
 #pragma region HashFuncs
-        int value_hash_func(int& address, int hashSize)
-        {
-          //  srand(time(nullptr));
-            int k = 3;
+        int value_hash_func(int& address, int hashSize) {
+
+            int k;
+            if (hashSize % 3 == 0)
+            {
+                k = 1;
+            }
+            else
+            {
+                k = 3;
+            }
             address = (address + k) % hashSize;
             return address;
         }
@@ -35,31 +44,42 @@ class HashTable
             address = key % hashSize;
             return address;
         }
+        int translatePercents(int fullness)
+        {
+            int result = (100*fullness)/this->hashSize;
+            return result;
+        }
+
+
 
 #pragma endregion
 
     public:
 
-        HashTable(int hashSize)
+        HashTable(int hashSize, int fillTable)
         {
             this->hashSize = hashSize;
             games = new Game[hashSize];
             arrAddress = new bool[hashSize];
             tableFullness = 0;
+            this->fillTable = fillTable;
         }
         ~HashTable()
         {
         }
         void Add(Game game)
         {
-            if ((hashSize - tableFullness) < 3)
+
+
+            if (translatePercents(tableFullness) >= fillTable)
             {
                 Game* tempGames = games;
                 bool* tempAdr = arrAddress;
-                hashSize+=20;
+                this -> hashSize+=20;
                 arrAddress = new bool[hashSize];
                 games = new Game[hashSize];
-                for (int i = 0; i < hashSize - 20; ++i)
+                tableFullness = 0;
+                for (int i = 0; i <  this -> hashSize - 20; ++i)
                 {
                     if (!tempAdr[i])
                     {
@@ -74,6 +94,7 @@ class HashTable
                 hashSize += 20;
                  */
             }
+
            int index = key_hash_func(game.id, hashSize);
            if(checkCollision(arrAddress, index, hashSize))
            {
@@ -147,6 +168,23 @@ class HashTable
 
         void Delete(Game game)
         {
+            if (tableFullness + 30 < hashSize)
+            {
+                Game* tempGames = games;
+                bool* tempAdr = arrAddress;
+                hashSize -= 20;
+                arrAddress = new bool[hashSize];
+                games = new Game[hashSize];
+                tableFullness = 0;
+                for (int i = 0; i < hashSize + 20; ++i)
+                {
+                    if (!tempAdr[i])
+                    {
+                        Add(tempGames[i]);
+                    }
+                }
+                cout << "Table narrow down" << endl;
+            }
             int index = Search(game);
             if (index == -1)
             {

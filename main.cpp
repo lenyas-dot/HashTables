@@ -11,12 +11,13 @@ int main() {
     Game metro1(name, genre, date, manufacturer);
     Game metro(name, genre, date, manufacturer);
 
-    HashTable table(10);
+    HashTable table(10, 80);
 
-    for (int i=1;i<10;i++) {
+    for (int i=1;i<30;i++) {
         table.Add(metro);
         metro.name[0]--;
         metro.date[0]++;
+
     }
 
     table.Add(metro);
@@ -37,7 +38,7 @@ int main() {
     //cout << table;
     table.Delete(metro1);
     cout << table;
-    for (int i=1;i<10;i++) {
+    for (int i=1;i<20;i++) {
         table.Delete(metro1);
         metro1.name[0]-=2;
         metro1.date[0]+=2;
