@@ -37,7 +37,7 @@ int main() {
     //cout << table;
     table.Delete(metro1);
     cout << table;
-    for (int i=1;i<5;i++) {
+    for (int i=1;i<10;i++) {
         table.Delete(metro1);
         metro1.name[0]-=2;
         metro1.date[0]+=2;

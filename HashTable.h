@@ -116,12 +116,26 @@ class HashTable
                         {
                             return index;
                         }
-                        while (!checkCollision(arrAddress, index, hashSize))
+                        int count = 0;
+                        while (true)
                         {
+
                             index = value_hash_func(game.id, hashSize);
-                            if (games[index].manufacturer == game.manufacturer && games[index].date == game.date && games[index].genre == game.genre && games[index].name == game.name)
+                            if (arrAddress[index])
                             {
-                                return index;
+                                continue;
+                            }
+                            else
+                            {
+                                count++;
+                                if (games[index].manufacturer == game.manufacturer && games[index].date == game.date && games[index].genre == game.genre && games[index].name == game.name)
+                                {
+                                    return index;
+                                }
+                            }
+                            if (count == hashSize)
+                            {
+                                break;
                             }
                         }
 
