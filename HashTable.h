@@ -11,8 +11,24 @@ class HashTable
         bool* arrAddress;
         int tableFullness;
         int fillTable;
-        bool inProcess = false;
 #pragma region HashFuncs
+        bool checkCollision(bool* addresses, Game* games, Game game)
+        {
+            for (int i = 0; i < hashSize; ++i)
+            {
+                if (!addresses[i])
+                {
+                    if (game.name == games[i].name && game.date == games[i].date)
+                    {
+                        cout << "Record: " << game.name << ", id: " << game.id << " didn't add" << endl;
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         int value_hash_func(int& address, int hashSize) {
 
             int k;
@@ -69,7 +85,10 @@ class HashTable
         }
         void Add(Game game)
         {
-
+            if (!checkCollision(arrAddress, games, game))
+            {
+                return;
+            }
 
             if (translatePercents(tableFullness) >= fillTable)
             {
@@ -206,7 +225,7 @@ class HashTable
             {
                 if (!table.arrAddress[i])
                 {
-                    out << i << ". Game: " << table.games[i].name << ", date of release: " << table.games[i].date << ", id: " << table.games[i].id << endl;
+                    out << i << ". Game: " << table.games[i].name << ", date of release: " << table.games[i].date << ", id: " << table.games[i].id << ", manufacturer: " << table.games[i].manufacturer << endl;
                 }
             }
             return out;
